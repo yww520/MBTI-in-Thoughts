@@ -9,7 +9,7 @@
 import json
 import os
 
-from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, SystemMessagePromptTemplate,HumanMessagePromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_openai import OpenAI
 from langchain_openai import ChatOpenAI
@@ -20,6 +20,11 @@ from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
+
+# 新增：检查API密钥是否存在（防止环境变量未配置导致的错误）
+api_key = os.getenv("DASHSCOPE_API_KEY")
+if not api_key:
+    raise ValueError("未找到千问API密钥！请在.env文件中设置 DASHSCOPE_API_KEY=你的密钥")
 
 class Story(BaseModel):
     """Story to be written."""
@@ -43,7 +48,8 @@ def write_story(story_prompt, personality_type, prompt_template, model_name: str
     llm = ChatTongyi(
         temperature=temperature,    
         model_name="qwen3-max",
-        api_key=os.getenv("sk-4acc2eacd26b4dd7923d0a71e6d4c0b0", ""),
+        # 关键修改：将环境变量名从 YOUR_API_KEY_HERE 改为 DASHSCOPE_API_KEY，使用提前检查过的api_key变量
+        api_key=api_key,
         base_url='https://dashscope.aliyuncs.com/compatible-mode/v1',
         max_tokens=2000,
     )
