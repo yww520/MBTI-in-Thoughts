@@ -94,10 +94,18 @@ if __name__ == '__main__':
         if args.top_upvoted_csv is None:
             raise ValueError("Must provide a CSV file path when using the top_upvoted dataset type")
         
-        dataset = TopUpvotedStoriesLoaderDataset(csv_path=args.top_upvoted_csv,
+        dataset = TopUpvotedStoriesLoaderDataset(csv_path="../../dataset/top_stories_batch_1.csv",
                                               start_index=generate_from,
                                               end_index=generate_to,
                                               min_words=25)
+        # 创建 dataset 后，立即打印数据集的基本信息
+        print(f"加载的数据集总条数：{len(dataset)}")  # 查看总记录数
+        if len(dataset) > 0:
+         # 查看第一条数据的结构（确认是否有内容）
+            sample_data = dataset[0]
+            print(f"第一条数据示例：{sample_data}")
+        else:
+            print("数据集为空！可能是过滤条件太严格，或数据格式错误。")
     else:
         raise ValueError(f"Unknown dataset type: {args.dataset_type}")
     

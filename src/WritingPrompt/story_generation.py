@@ -9,10 +9,11 @@
 import json
 import os
 
-from langchain-core.prompts import PromptTemplate, ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
-from langchain-core.output_parsers import JsonOutputParser
-from langchain-openai import OpenAI
-from langchain-openai import ChatOpenAI
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, SystemMessagePromptTemplate,HumanMessagePromptTemplate
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
+from langchain_community.chat_models.tongyi import ChatTongyi
 from langchain.output_parsers import OutputFixingParser
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
@@ -39,11 +40,11 @@ def evaluate_json_output(output, fixing_parser):
 
 
 def write_story(story_prompt, personality_type, prompt_template, model_name: str = 'qwen/qwen3-235b-a22b:free', temperature: float = 0.0, max_tokens: int = -1):
-    llm = ChatOpenAI(
+    llm = ChatTongyi(
         temperature=temperature,    
-        model_name=model_name,
-        api_key=os.getenv("OPENROUTER_API_KEY", ""),
-        base_url='https://openrouter.ai/api/v1',
+        model_name="qwen3-max",
+        api_key=os.getenv("sk-4acc2eacd26b4dd7923d0a71e6d4c0b0", ""),
+        base_url='https://dashscope.aliyuncs.com/compatible-mode/v1',
         max_tokens=2000,
     )
 
